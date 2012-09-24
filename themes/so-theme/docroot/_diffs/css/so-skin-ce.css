@@ -16,7 +16,7 @@ $content-width: ($fixed-width - $navigation-width) - 2px;
 body {
 	color: #666;
 	font: 12px/1.5em 'Helvetica', Arial, sans-serif;
-}
+}asfg ds
 
 a, a:visited, a:active {
 	color: $blue-link;
@@ -121,8 +121,7 @@ a:hover {
 /* ---------- Layout ---------- */
 
 #content {
-	#so-context {
-		border: 1px solid $gray-dark;
+	#so-context {d: 1px solid $gray-dark;
 		border-width: 0 1px 1px 0;
 		position: relative;
 		zoom: 1;
@@ -170,10 +169,7 @@ a:hover {
 	li {
 		a {
 			border: 1px solid transparent;
-			border-width: 1px 0;
-			display: block;
-			padding: 7px 14px;
-
+			border-width: 1px 0; asd
 			&:hover {
 				border-color: #F4F3F3 transparent #D9D8D8;
 			}
@@ -308,9 +304,7 @@ a:hover {
 
 			.search-input {
 				width: 151px;
-			}
-		}
-
+			}das f
 		.portlet-content {
 			padding: 5px 10px 0 5px;
 		}
@@ -511,24 +505,7 @@ input[type=password], input[type=text], textarea, .aui-field-select select, .aui
 	}
 }
 
-button, input[type=button], input[type=submit], input[type=reset], #toggleFluid, .aui-button-disabled button, .aui-button-disabled button:hover, .aui-button-disabled button:focus, .aui-button-disabled input[type], .aui-button-disabled input[type]:hover, .aui-button-disabled input[type]:focus, .aui-dialog-hd, .aui-panel-hd, .aui-state-default, .aui-tabview-list, .aui-tab, .aui-tab-content, .contacts-portlet .social-relations a:hover, .edit-controls a:hover, .lfr-header-row .aui-button-input, .lfr-header-row .aui-buttonitem-content, .lfr-header-row .lfr-actions.lfr-extended, .lfr-header-row .lfr-search-combobox, .results-header th, .lfr-actions.lfr-extended, .invite-members, .portlet-blogs .lfr-meta-actions, .portlet-blogs .lfr-meta-actions a, .portlet-document-library .select-documents, .portlet-document-library-display .select-documents, .portlet-wiki .top-links-nodes .top-link-node a.node-current, .tasks-dialog .control a.taglib-icon, .thread-controls a:hover, .top-links-navigation a:hover {
-	background: #E9E8E8;
-	border: 1px solid $gray;
-	text-shadow: none;
-}
-
-input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .contacts-portlet .social-relations a, .edit-controls a:hover, .invite-members:hover, .lfr-actions.lfr-extended, .portlet-blogs .lfr-meta-actions a, .thread-controls a:hover, .tasks-dialog .control a.taglib-icon, .top-links-navigation a:hover {
-	&:hover {
-		background: #EEE;
-		border-color: #AAA;
-		color: #5A5A5A;
-	}
-}
-
-.lfr-label {
-	color: #999;
-	font-size: 11px;
-	font-weight: bold;
+button, input[type=button], input[type=submit], input[type=reset], #toggleFluid, ads f
 	text-align: right;
 	vertical-align: top;
 }
@@ -775,7 +752,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 .ie6 .taglib-ratings .aui-rating {
 	width: 110px;
 }
-
+dasfasdf
 /* ---------- Search Iterator ---------- */
 
 .taglib-search-iterator {
@@ -974,7 +951,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 
 	h1.header-title {
 		font-size: 2em;
-		margin-top: 2em;
+		margin-top: 2em;asdf
 	}
 
 	.entry {
