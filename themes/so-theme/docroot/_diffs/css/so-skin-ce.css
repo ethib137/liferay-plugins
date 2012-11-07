@@ -264,6 +264,7 @@ a:hover {
 
 #so-sidebar {
 	border-right: 1px solid $gray-dark;
+	padding-bottom: 31px;
 
 	.portlet-msg, .portlet-msg-alert, .portlet-msg-error, .portlet-msg-info, .portlet-msg-success {
 		margin: 0 0 10px;
@@ -2337,7 +2338,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 					margin: 0;
 				}
 			}
-			
+
 			.name {
 				max-width: 115px;
 			}
