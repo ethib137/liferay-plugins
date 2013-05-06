@@ -17,62 +17,73 @@
  */
 --%>
 
-<div class="edit-actions">
-	<c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.UPDATE) %>">
-		<span class="action edit-entry">
+<div class="entry-footer-toolbar">
+	<div class="edit-actions">
+		<c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.UPDATE) %>">
+			<span class="action edit-entry">
 
-			<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/edit_entry.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" /></portlet:renderURL>
+				<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/edit_entry.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" /></portlet:renderURL>
 
-			<a href="<%= "javascript:" + renderResponse.getNamespace() + "editEntry('" + editURL.toString() + "');" %>">
-				<liferay-ui:icon
-					image="edit"
+				<a href="<%= "javascript:" + renderResponse.getNamespace() + "editEntry('" + editURL.toString() + "');" %>">
+					<liferay-ui:icon
+						image="edit"
+						label="<%= true %>"
+						/>
+				</a>
+			</span>
+		</c:if>
+
+		<c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.DELETE) %>">
+			<span class="action delete-entry">
+				<liferay-portlet:actionURL portletName="<%= PortletKeys.ANNOUNCEMENTS %>" var="deleteURL">
+					<portlet:param name="struts_action" value="/announcements/edit_entry" />
+					<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
+					<portlet:param name="redirect" value="<%= currentURL %>" />
+					<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
+				</liferay-portlet:actionURL>
+
+				<liferay-ui:icon-delete
 					label="<%= true %>"
-					/>
-			</a>
-		</span>
-	</c:if>
-
-	<c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.DELETE) %>">
-		<span class="action delete-entry">
-			<liferay-portlet:actionURL portletName="<%= PortletKeys.ANNOUNCEMENTS %>" var="deleteURL">
-				<portlet:param name="struts_action" value="/announcements/edit_entry" />
-				<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
-				<portlet:param name="redirect" value="<%= currentURL %>" />
-				<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
-			</liferay-portlet:actionURL>
-
-			<liferay-ui:icon-delete
-				label="<%= true %>"
-				url="<%= deleteURL %>"
-			/>
-		</span>
-	</c:if>
-
-	<c:if test="<%= themeDisplay.isSignedIn() %>">
-		<span class="action control-entry">
-			<a href='<%= "javascript:" + renderResponse.getNamespace() + "handleEntry(" + entry.getEntryId() + ");" %>'>
-				<liferay-ui:icon
-					image="checked"
-					label="<%= false %>"
+					url="<%= deleteURL %>"
 				/>
-				<liferay-ui:message key='<%= ((flagValue == AnnouncementsFlagConstants.HIDDEN) ? "mark-as-unread" : "mark-as-read") %>' />
-			</a>
-		</span>
-	</c:if>
+			</span>
+		</c:if>
 
-	<span id="toggleEntry<%= entry.getEntryId() %>"></span>
+		<c:if test="<%= themeDisplay.isSignedIn() %>">
+			<span class="action control-entry">
+				<a href='<%= "javascript:" + renderResponse.getNamespace() + "handleEntry(" + entry.getEntryId() + ");" %>'>
+					<liferay-ui:icon
+						image="checked"
+						label="<%= false %>"
+					/>
+					<liferay-ui:message key='<%= ((flagValue == AnnouncementsFlagConstants.HIDDEN) ? "mark-as-unread" : "mark-as-read") %>' />
+				</a>
+			</span>
+		</c:if>
+
+		<span id="toggleEntry<%= entry.getEntryId() %>"></span>
+	</div>
 </div>
 
 <aui:script use="aui-base">
-	var content = A.one('#<portlet:namespace /><%= entry.getEntryId() %> .entry-content');
+	var entry = A.one('#<portlet:namespace /><%= entry.getEntryId() %>');
+	var content = entry.one('.entry-content');
+	var toggle = document.getElementById('toggleEntry<%= entry.getEntryId() %>');
 
 	if (content.height() > 75) {
-		var toggleEntry = document.getElementById('toggleEntry<%= entry.getEntryId() %>');
-		toggleEntry.innerHTML='<a class="toggle-entry" data-entryId="<%= entry.getEntryId() %>" href="javascript:;"><span><liferay-ui:message key='view-more' /></span></a>';
-		toggleEntry.className = 'action';
+		toggle.innerHTML='<a class="toggle-entry" data-entryId="<%= entry.getEntryId() %>" href="javascript:;"><span><liferay-ui:message key='view-more' /></span></a>';
+		toggle.className = 'action';
 	}
 	else {
 		var contentContainer = document.getElementById('entryContentContainer<%= entry.getEntryId() %>');
 		contentContainer.style.height = 'auto';
+		toggle.parentNode.removeChild(toggle);
+	}
+
+	editActions = entry.one('.edit-actions');
+
+	if (editActions._node.children.length == 0) {
+		var footer = entry.one('.entry-footer');
+		footer.empty();
 	}
 </aui:script>

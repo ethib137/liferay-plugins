@@ -141,11 +141,6 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 		}
 
 		var date = new Date();
-		date.setFullYear(A.one('#displaydateyear').get('value'));
-		date.setMonth(A.one('#displaydatemonth').get('value'));
-		date.setDate(A.one('#displaydateday').get('value'));
-		date.setHours(A.one('select[name="displayDateHour"]').get('value'));
-		date.setMinutes(A.one('select[name="displayDateMinute"]').get('value'));
 
 		var content = window.editor.getHTML();
 
@@ -197,7 +192,6 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 		document.<portlet:namespace />fm.content.value = <portlet:namespace />getContent();
 		submitForm(document.<portlet:namespace />fm, "<liferay-portlet:actionURL portletName="<%= PortletKeys.ANNOUNCEMENTS %>"><portlet:param name="struts_action" value="/announcements/edit_entry" /></liferay-portlet:actionURL>");
 	}
-
 </aui:script>
 <aui:script use="aui-base,transition">
 	var announcementEntries = A.one('#main-content');

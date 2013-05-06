@@ -68,9 +68,11 @@ int visibleMessagesCount = total;
 flagValue = AnnouncementsFlagConstants.HIDDEN;
 
 searchContainer = new SearchContainer(renderRequest, null, null, "cur2", pageDelta, portletURL, null, "there-are-currently-no-read-entries");
+
+results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes, portletName.equals(PortletKeys.ALERTS), flagValue, searchContainer.getStart(), searchContainer.getEnd());
 %>
 
-<c:if test="<%= themeDisplay.isSignedIn() %>">
+<c:if test="<%= (themeDisplay.isSignedIn()) && (results.size() != 0) %>">
 	<div class="read-entries" id="readEntries">
 		<div class="header">
 			<span><%= LanguageUtil.get(pageContext, "read-entries") %></span>
@@ -79,6 +81,27 @@ searchContainer = new SearchContainer(renderRequest, null, null, "cur2", pageDel
 			<%@ include file="/entry_iterator.jspf" %>
 		</div>
 	</div>
+
+	<aui:script>
+		AUI().ready(
+			'aui-toggler',
+			function(A) {
+				new A.Toggler(
+					{
+						animated: true,
+						container: '#readEntries',
+						content: '.content',
+						expanded: false,
+						header: '.header',
+						transition: {
+							duration: 0.5,
+							easing: 'ease-in-out'
+						}
+					}
+				);
+			}
+		);
+	</aui:script>
 </c:if>
 
 <%
@@ -92,7 +115,7 @@ String distributionScope = ParamUtil.getString(request, "distributionScope");
 </c:if>
 
 <aui:script use="aui-base,transition">
-	var announcementEntries = A.one('#p_p_id_1_WAR_soannouncementsportlet_');
+	var announcementEntries = A.one('#p_p_id<portlet:namespace />');
 
 	announcementEntries.delegate(
 		'click',
@@ -135,7 +158,6 @@ String distributionScope = ParamUtil.getString(request, "distributionScope");
 		'.toggle-entry'
 	);
 </aui:script>
-
 <aui:script>
 	function <portlet:namespace />handleEntry(entryId) {
 		var A = AUI();
@@ -174,29 +196,10 @@ String distributionScope = ParamUtil.getString(request, "distributionScope");
 		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
 	}
 
-	YUI().ready(
-	'aui-toggler',
-		function(Y) {
-			new Y.Toggler(
-				{
-				animated: true,
-				container: '#readEntries',
-				content: '.content',
-				expanded: false,
-				header: '.header',
-				transition: {
-					duration: 0.5,
-					easing: 'ease-in-out'
-					}
-				}
-			);
-		}
-	);
-
 	function <portlet:namespace />addEntry() {
 		<portlet:renderURL var="addEntryURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/edit_entry.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>
 
-		<portlet:namespace />openPopup('<%= LanguageUtil.get(pageContext, "add-entry") %>', 500, 'so-portlet-announcements-edit-dialog', '<%= addEntryURL %>')
+		Liferay.Announcements.openPopup('<%= LanguageUtil.get(pageContext, "add-entry") %>', 500, 'so-portlet-announcements-edit-dialog', '<%= addEntryURL %>');
 	}
 
 	function <portlet:namespace />manageEntries() {
@@ -206,30 +209,7 @@ String distributionScope = ParamUtil.getString(request, "distributionScope");
 	}
 
 	function <portlet:namespace />editEntry(uri) {
-		<portlet:namespace />openPopup('<%= LanguageUtil.get(pageContext, "edit-entry") %>', 500, 'so-portlet-announcements-edit-dialog', uri);
-	}
-
-	function <portlet:namespace />openPopup(title, width, cssClass, url) {
-		var A = AUI();
-		var dialog = new A.Dialog(
-			{
-				align: Liferay.Util.Window.ALIGN_CENTER,
-				cssClass: cssClass,
-				modal: true,
-				resizable: true,
-				title: title,
-				width: width
-			}
-		).plug(
-			A.Plugin.IO,
-			{
-				autoLoad: false,
-				uri: url
-			}
-		).render();
-
-		dialog.show();
-		dialog.io.start();
+		Liferay.Announcements.openPopup('<%= LanguageUtil.get(pageContext, "edit-entry") %>', 500, 'so-portlet-announcements-edit-dialog', uri);
 	}
 
 	function <portlet:namespace />openWindow(url, title, modal, width) {

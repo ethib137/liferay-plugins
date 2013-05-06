@@ -97,9 +97,7 @@ Object[] titleArguments = new Object[] {entryUserLink, scopeNameSpan};
 		</div>
 
 		<div class="entry-footer">
-			<div class="entry-footer-toolbar">
-				<%@ include file="/entry_action.jspf" %>
-			</div>
+			<%@ include file="/entry_action.jspf" %>
 		</div>
 	</div>
 </div>
