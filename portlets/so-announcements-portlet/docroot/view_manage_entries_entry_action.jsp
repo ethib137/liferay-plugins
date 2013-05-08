@@ -27,8 +27,11 @@ AnnouncementsEntry entry = (AnnouncementsEntry)row.getObject();
 
 <c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.UPDATE) %>">
 		<span class="action edit-entry">
-
-			<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/edit_entry.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" /></portlet:renderURL>
+			<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+				<portlet:param name="mvcPath" value="/edit_entry.jsp" />
+				<portlet:param name="redirect" value="<%= currentURL %>" />
+				<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
+			</portlet:renderURL>
 
 			<a href="<%= editURL %>">
 				<liferay-ui:icon
@@ -41,9 +44,7 @@ AnnouncementsEntry entry = (AnnouncementsEntry)row.getObject();
 
 <c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.DELETE) %>">
 		<span class="action delete-entry">
-			<liferay-portlet:actionURL portletName="<%= PortletKeys.ANNOUNCEMENTS %>" var="deleteURL">
-				<portlet:param name="struts_action" value="/announcements/edit_entry" />
-				<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
+			<liferay-portlet:actionURL name="deleteEntry" var="deleteURL">
 				<portlet:param name="redirect" value="<%= currentURL %>" />
 				<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
 			</liferay-portlet:actionURL>

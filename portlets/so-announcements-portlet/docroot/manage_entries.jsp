@@ -99,36 +99,40 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 			}
 
 			ResultRow row = new ResultRow(entry, entry.getEntryId(), i);
+		%>
 
-			PortletURL rowURL = renderResponse.createRenderURL();
+			<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+				<portlet:param name="mvcPath" value="/edit_entry.jsp" />
+				<portlet:param name="redirect" value="<%= currentURL %>" />
+				<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
+			</portlet:renderURL>
 
-			rowURL.setParameter("struts_action", "/announcements/edit_entry");
-			rowURL.setParameter("redirect", currentURL);
-			rowURL.setParameter("entryId", String.valueOf(entry.getEntryId()));
+		<%
+			String entryUserLink = entryUser.getDisplayURL(themeDisplay);
 
 			// Title
 
-			row.addText(entry.getTitle(), rowURL);
+			row.addText(entry.getTitle(), editURL);
 
 			// Author
 
-			row.addText(entryUser.getFullName(), rowURL);
+			row.addText(entryUser.getFullName(), entryUserLink);
 
 			// Type
 
-			row.addText(LanguageUtil.get(pageContext, entry.getType()), rowURL);
+			row.addText(LanguageUtil.get(pageContext, entry.getType()));
 
 			// Modified date
 
-			row.addText(dateFormatDate.format(entry.getModifiedDate()), rowURL);
+			row.addText(dateFormatDate.format(entry.getModifiedDate()));
 
 			// Display date
 
-			row.addText(dateFormatDate.format(entry.getDisplayDate()), rowURL);
+			row.addText(dateFormatDate.format(entry.getDisplayDate()));
 
 			// Expiration date
 
-			row.addText(dateFormatDate.format(entry.getExpirationDate()), rowURL);
+			row.addText(dateFormatDate.format(entry.getExpirationDate()));
 
 			// Action
 

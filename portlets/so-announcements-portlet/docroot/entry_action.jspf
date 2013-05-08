@@ -35,9 +35,7 @@
 
 		<c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.DELETE) %>">
 			<span class="action delete-entry">
-				<liferay-portlet:actionURL portletName="<%= PortletKeys.ANNOUNCEMENTS %>" var="deleteURL">
-					<portlet:param name="struts_action" value="/announcements/edit_entry" />
-					<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.DELETE %>" />
+				<liferay-portlet:actionURL name="deleteEntry" var="deleteURL">
 					<portlet:param name="redirect" value="<%= currentURL %>" />
 					<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
 				</liferay-portlet:actionURL>
@@ -80,7 +78,7 @@
 		toggle.parentNode.removeChild(toggle);
 	}
 
-	editActions = entry.one('.edit-actions');
+	var editActions = entry.one('.edit-actions');
 
 	if (editActions._node.children.length == 0) {
 		var footer = entry.one('.entry-footer');

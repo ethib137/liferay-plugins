@@ -199,7 +199,7 @@ String distributionScope = ParamUtil.getString(request, "distributionScope");
 	function <portlet:namespace />addEntry() {
 		<portlet:renderURL var="addEntryURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/edit_entry.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>
 
-		Liferay.Announcements.openPopup('<%= LanguageUtil.get(pageContext, "add-entry") %>', 500, 'so-portlet-announcements-edit-dialog', '<%= addEntryURL %>');
+		Liferay.Announcements.openPopup('<%= LanguageUtil.get(pageContext, "add-entry") %>', 600, 'so-portlet-announcements-edit-dialog', '<%= addEntryURL %>');
 	}
 
 	function <portlet:namespace />manageEntries() {
@@ -209,7 +209,7 @@ String distributionScope = ParamUtil.getString(request, "distributionScope");
 	}
 
 	function <portlet:namespace />editEntry(uri) {
-		Liferay.Announcements.openPopup('<%= LanguageUtil.get(pageContext, "edit-entry") %>', 500, 'so-portlet-announcements-edit-dialog', uri);
+		Liferay.Announcements.openPopup('<%= LanguageUtil.get(pageContext, "edit-entry") %>', 600, 'so-portlet-announcements-edit-dialog', uri);
 	}
 
 	function <portlet:namespace />openWindow(url, title, modal, width) {

@@ -91,7 +91,9 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 			<aui:option label="important" value="1" />
 		</aui:select>
 
-		<aui:input name="title" />
+		<aui:input name="title">
+			<aui:validator name="required" />
+		</aui:input>
 
 		<aui:input name="url" />
 
@@ -165,7 +167,7 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 				+ "<div class='title'>"
 					+ A.one('#title').get('value')
 				+ "</div>"
-				+ "<div class='entry-content-container'>"
+				+ "<div class='entry-content-container' id='previewEntryContentContainer'>"
 					+ "<div class='entry-content'>"
 							+ content
 					+ "</div>"
@@ -173,16 +175,31 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 			+ "</div>"
 			+ "<div class='entry-footer'>"
 				+ "<div class='entry-footer-toolbar'>"
-					+ "<span class='action' id='toggle-entryPreview'></span>"
+					+ "<div class='edit-actions'>"
+						+ "<span class='action' id='toggle-entryPreview'></span>"
+					+ "</div>"
 				+ "</div>"
 			+ "</div>"
 		+ "</div>";
 
 		var previewContent = A.one('#<portlet:namespace />preview .entry-content');
+		var toggle = document.getElementById('toggle-entryPreview');
 
 		if (previewContent.height() > 75) {
-			var toggleEntry = document.getElementById('toggle-entryPreview');
-			toggleEntry.innerHTML='<a class="toggle-entry" data-entryId="preview" href="javascript:;"><liferay-ui:message key='view-more' /></a>';
+			toggle.innerHTML='<a class="toggle-entry" data-entryId="preview" href="javascript:;"><liferay-ui:message key='view-more' /></a>';
+			toggle.className = 'action';
+		}
+		else {
+			var contentContainer = document.getElementById('previewEntryContentContainer');
+			contentContainer.style.height = 'auto';
+			toggle.parentNode.removeChild(toggle);
+		}
+
+		var editActions = A.one('#<portlet:namespace />preview .edit-actions');
+
+		if (editActions._node.children.length == 0) {
+			var footer = A.one('#<portlet:namespace />preview .entry-footer');
+			footer.empty();
 		}
 	}
 
@@ -190,7 +207,7 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 		document.<portlet:namespace />fm.target = '';
 		document.<portlet:namespace />fm.<%= Constants.CMD %>.value = "<%= (entry == null) ? Constants.ADD : Constants.UPDATE %>";
 		document.<portlet:namespace />fm.content.value = <portlet:namespace />getContent();
-		submitForm(document.<portlet:namespace />fm, "<liferay-portlet:actionURL portletName="<%= PortletKeys.ANNOUNCEMENTS %>"><portlet:param name="struts_action" value="/announcements/edit_entry" /></liferay-portlet:actionURL>");
+		submitForm(document.<portlet:namespace />fm, "<liferay-portlet:actionURL name="saveEntry"><portlet:param name="redirect" value="<%= currentURL %>" /></liferay-portlet:actionURL>");
 	}
 </aui:script>
 <aui:script use="aui-base,transition">
