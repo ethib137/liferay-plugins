@@ -114,46 +114,13 @@ String distributionScope = ParamUtil.getString(request, "distributionScope");
 	<liferay-ui:search-paginator id="pageIteratorBottom" searchContainer="<%= searchContainer %>" type="article" />
 </c:if>
 
-<aui:script use="aui-base,transition">
+<aui:script use="aui-base">
 	var announcementEntries = A.one('#p_p_id<portlet:namespace />');
 
 	announcementEntries.delegate(
 		'click',
 		function(event) {
-			var node = event.currentTarget;
-			entryId = node.getAttribute('data-entryId');
-
-			var entry = A.one('#<portlet:namespace />' + entryId);
-			var content = entry.one('.entry-content');
-			var contentContainer = entry.one('.entry-content-container');
-			var control = entry.all('.toggle-entry');
-			contentHeight = '75px';
-
-			if (entry.hasClass('visible')) {
-				entry.removeClass('visible');
-
-				contentHeight = '75px';
-
-				if (control) {
-					control.html('<%= UnicodeLanguageUtil.get(pageContext, "view-more") %>');
-				}
-			}
-			else {
-				entry.addClass('visible');
-
-				contentHeight = content.getComputedStyle('height');
-
-				if (control) {
-					control.html('<%= UnicodeLanguageUtil.get(pageContext, "view-less") %>');
-				}
-			}
-			contentContainer.transition(
-				{
-					height: contentHeight,
-					duration: 0.5,
-					easing: 'ease-in-out'
-				}
-			);
+			Liferay.Announcements.toggleEntry(event,'<portlet:namespace />');
 		},
 		'.toggle-entry'
 	);
