@@ -939,6 +939,11 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	.title {
 		background: #F4A425;
 		color: #FFF;
+
+		a {
+			color: #FFF;
+			text-decoration: underline;
+		}
 	}
 
 	.entry-footer-toolbar {

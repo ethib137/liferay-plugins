@@ -26,32 +26,33 @@ AnnouncementsEntry entry = (AnnouncementsEntry)row.getObject();
 %>
 
 <c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.UPDATE) %>">
-		<span class="action edit-entry">
-			<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-				<portlet:param name="mvcPath" value="/edit_entry.jsp" />
-				<portlet:param name="redirect" value="<%= currentURL %>" />
-				<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
-			</portlet:renderURL>
+	<span class="action edit-entry">
+		<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+			<portlet:param name="mvcPath" value="/edit_entry.jsp" />
+			<portlet:param name="redirect" value="<%= currentURL %>" />
+			<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
+			<portlet:param name="backButton" value="true" />
+		</portlet:renderURL>
 
-			<a href="<%= editURL %>">
-				<liferay-ui:icon
-					image="edit"
-					label="<%= true %>"
-					/>
-			</a>
-		</span>
+		<a href="<%= editURL %>">
+			<liferay-ui:icon
+				image="edit"
+				label="<%= true %>"
+				/>
+		</a>
+	</span>
 </c:if>
 
 <c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.DELETE) %>">
-		<span class="action delete-entry">
-			<liferay-portlet:actionURL name="deleteEntry" var="deleteURL">
-				<portlet:param name="redirect" value="<%= currentURL %>" />
-				<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
-			</liferay-portlet:actionURL>
+	<span class="action delete-entry">
+		<liferay-portlet:actionURL name="deleteEntry" var="deleteURL">
+			<portlet:param name="redirect" value="<%= currentURL %>" />
+			<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
+		</liferay-portlet:actionURL>
 
-			<liferay-ui:icon-delete
-				label="<%= true %>"
-				url="<%= deleteURL %>"
-				/>
-		</span>
+		<liferay-ui:icon-delete
+			label="<%= true %>"
+			url="<%= deleteURL %>"
+			/>
+	</span>
 </c:if>

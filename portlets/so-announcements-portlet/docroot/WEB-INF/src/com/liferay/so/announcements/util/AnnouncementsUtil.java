@@ -19,7 +19,11 @@ package com.liferay.so.announcements.util;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
@@ -31,12 +35,18 @@ import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 
+import java.text.Format;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * @author Raymond Augé
+ * @author Evan Thibodeau
  */
 public class AnnouncementsUtil {
 
@@ -135,6 +145,43 @@ public class AnnouncementsUtil {
 		}
 
 		return scopes;
+	}
+
+	public static String getRelativeTimeDescription(
+		Date date, Locale locale, TimeZone timeZone) {
+
+		long milliseconds = date.getTime();
+
+		Format timeFormat = FastDateFormatFactoryUtil.getTime(locale, timeZone);
+
+		int daysBetween = DateUtil.getDaysBetween(
+			new Date(milliseconds), new Date(), timeZone);
+
+		long millisAgo = System.currentTimeMillis() - milliseconds;
+
+		if (millisAgo <= Time.MINUTE) {
+			return "about-a-minute-ago";
+		}
+		else if (millisAgo < Time.HOUR) {
+			return LanguageUtil.format(
+				locale, "x-minutes-ago", (millisAgo / Time.MINUTE));
+		}
+		else if ((millisAgo / Time.HOUR) == 1) {
+			return "about-an-hour-ago";
+		}
+		else if ((millisAgo < Time.DAY) || (daysBetween == 0)) {
+			return LanguageUtil.format(
+				locale, "x-hours-ago", (millisAgo / Time.HOUR));
+		}
+		else if (daysBetween == 1) {
+			return LanguageUtil.format(
+				locale, "yesterday-at-x", timeFormat.format(milliseconds));
+		}
+
+		Format dateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
+			"EEEE, MMMMM dd, yyyy", locale, timeZone);
+
+		return dateFormat.format(milliseconds);
 	}
 
 	private static long[] _getGroupIds(List<Group> groups) {

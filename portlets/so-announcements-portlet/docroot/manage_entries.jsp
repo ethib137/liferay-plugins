@@ -51,6 +51,7 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 	<portlet:renderURL var="addEntryURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 		<portlet:param name="mvcPath" value="/edit_entry.jsp" />
 		<portlet:param name="redirect" value="<%= currentURL %>" />
+		<portlet:param name="backButton" value="true" />
 	</portlet:renderURL>
 
 	<aui:button href="<%= addEntryURL %>" value="add-entry" />
@@ -104,19 +105,18 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 			<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 				<portlet:param name="mvcPath" value="/edit_entry.jsp" />
 				<portlet:param name="redirect" value="<%= currentURL %>" />
+				<portlet:param name="backButton" value="true" />
 				<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
 			</portlet:renderURL>
 
 		<%
-			String entryUserLink = entryUser.getDisplayURL(themeDisplay);
-
 			// Title
 
 			row.addText(entry.getTitle(), editURL);
 
 			// Author
 
-			row.addText(entryUser.getFullName(), entryUserLink);
+			row.addText(entryUser.getFullName());
 
 			// Type
 
@@ -161,7 +161,7 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 	}
 
 	function <portlet:namespace />selectDistributionScope(distributionScope) {
-	var url = "<%= portletURL.toString() %>&<portlet:namespace />distributionScope=" + distributionScope;
-	submitForm(document.<portlet:namespace />fm, url);
+		var url = "<%= portletURL.toString() %>&<portlet:namespace />distributionScope=" + distributionScope;
+		submitForm(document.<portlet:namespace />fm, url);
 	}
 </aui:script>

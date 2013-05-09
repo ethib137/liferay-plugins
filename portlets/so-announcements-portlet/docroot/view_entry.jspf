@@ -71,7 +71,7 @@ Object[] titleArguments = new Object[] {entryUserLink, scopeNameSpan};
 	<div class="entry-data">
 		<div class="entry-header">
 			<div class="entry-time">
-				<%= dateFormatDate.format(entry.getDisplayDate()) %>
+				<%= AnnouncementsUtil.getRelativeTimeDescription(entry.getDisplayDate(), locale, themeDisplay.getTimeZone()) %>
 			</div>
 			<div class="entry-action">
 				<%= LanguageUtil.format(pageContext, "x-to-x", titleArguments) %>

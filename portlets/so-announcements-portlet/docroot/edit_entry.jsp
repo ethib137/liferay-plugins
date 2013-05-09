@@ -20,9 +20,11 @@
 <%@ include file="/init.jsp" %>
 
 <%
-String redirect = ParamUtil.getString(request, "redirect");
+String redirect = PortalUtil.escapeRedirect(ParamUtil.getString(request, "redirect"));
+String backButton = ParamUtil.getString(request, "backButton");
 
 long entryId = ParamUtil.getLong(request, "entryId");
+
 AnnouncementsEntry entry = AnnouncementsEntryLocalServiceUtil.fetchAnnouncementsEntry(entryId);
 
 String content = BeanParamUtil.getString(entry, request, "content");
@@ -36,6 +38,10 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 	<aui:input name="entryId" type="hidden" value="<%= entryId %>" />
 	<aui:input name="alert" type="hidden" value="<%= portletName.equals(PortletKeys.ALERTS) %>" />
 
+	<c:if test="<%= Validator.isNotNull(backButton) %>">
+		<span class="back-link"><a href="<%= redirect %>">&laquo; Back</a></span>
+	</c:if>
+
 	<aui:model-context bean="<%= entry %>" model="<%= AnnouncementsEntry.class %>" />
 
 	<aui:fieldset>
@@ -48,6 +54,7 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 
 				<%@ include file="/entry_scope.jspf" %>
 
+				<aui:input name="scope" type="hidden" value="<%= scopeName %>" />
 			</c:when>
 			<c:otherwise>
 
@@ -115,8 +122,8 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 
 		<aui:button href="<%= redirect %>" type="cancel" />
 	</aui:button-row>
-
 </aui:form>
+
 <div id="<%= renderResponse.getNamespace() + "preview" %>"></div>
 
 <aui:script>
@@ -128,25 +135,38 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 		var ckEditor = CKEDITOR.instances["editor"];
 		ckEditor.resize("100%", "200");
 
-		return "<%= UnicodeFormatter.toString(content) %>";
+		return '<%= UnicodeFormatter.toString(content) %>';
 	}
 
 	function <portlet:namespace />previewEntry() {
 		var A = AUI();
 
-		if (A.one('select[name="distributionScope"]') !== null) {
-			optValue = A.one('select[name="distributionScope"]').get('value');
-			scope = A.one('option[value=' + optValue + ']').get('text');
-		}
-		else {
-			scope = "blank";
+		var preview = document.getElementById('<portlet:namespace />preview');
+		var priority = A.one('#priority')._node.selectedIndex;
+
+		if (priority == 1) {
+			preview.className = 'important-entry';
 		}
 
-		var date = new Date();
+		if (<%= entry != null %>) {
+			var scope = A.one('#scope').get('value');;
+		}
+		else {
+			var optValue = A.one('select[name="distributionScope"]').get('value');
+			var scope = A.one('option[value=' + optValue + ']').get('text');
+		}
+
+		var url = A.one('#url').get('value');
+
+		if (url.length != 0) {
+			var title = '<a href="' + url + '">' + A.one('#title').get('value') + '</a>';
+		}
+		else {
+			var title = A.one('#title').get('value');
+		}
 
 		var content = window.editor.getHTML();
 
-		var preview = document.getElementById('<portlet:namespace />preview');
 		preview.innerHTML="<div class='user-portrait'>"
 				+ "<span class='avatar'>"
 					+ "<a href='<%= currentUser.getDisplayURL(themeDisplay) %>'>"
@@ -157,15 +177,15 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 		+ "<div class='entry-data'>"
 			+ "<div class='entry-header'>"
 				+ "<div class='entry-time'>"
-					+ date.toDateString()
+					+ Liferay.Language.get('about-a-minute-ago')
 				+ "</div>"
 				+ "<div class='entry-user-name'>"
-					+ themeDisplay.getUserName() + " to " + scope
+					+ "<a href='#'>" + themeDisplay.getUserName() + "</a> to <span class='scope'>" + scope + "</span>"
 				+ "</div>"
 			+ "</div>"
 			+ "<div class='entry-body'>"
 				+ "<div class='title'>"
-					+ A.one('#title').get('value')
+					+ title
 				+ "</div>"
 				+ "<div class='entry-content-container' id='previewEntryContentContainer'>"
 					+ "<div class='entry-content'>"

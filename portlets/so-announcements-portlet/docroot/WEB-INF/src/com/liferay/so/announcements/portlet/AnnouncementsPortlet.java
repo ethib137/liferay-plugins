@@ -32,6 +32,7 @@ import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
 /**
+ * @author Raymond Augé
  * @author Evan Thibodeau
  */
 public class AnnouncementsPortlet extends MVCPortlet {
@@ -40,22 +41,17 @@ public class AnnouncementsPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		System.out.println("Delete Entry");
-
 		long entryId = ParamUtil.getLong(actionRequest, "entryId");
 
 		AnnouncementsEntryServiceUtil.deleteEntry(entryId);
-	} public void saveEntry(
+	}
+
+	public void saveEntry(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
-
-		System.out.println("Save Entry");
 
 		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
 
@@ -97,9 +93,6 @@ public class AnnouncementsPortlet extends MVCPortlet {
 			displayDateHour += 12;
 		}
 
-		boolean autoDisplayDate = ParamUtil.getBoolean(
-			actionRequest, "autoDisplayDate");
-
 		int expirationDateMonth = ParamUtil.getInteger(
 			actionRequest, "expirationDateMonth");
 		int expirationDateDay = ParamUtil.getInteger(
@@ -128,7 +121,7 @@ public class AnnouncementsPortlet extends MVCPortlet {
 				themeDisplay.getPlid(), classNameId, classPK, title, content,
 				url, type, displayDateMonth, displayDateDay, displayDateYear,
 				displayDateHour, displayDateMinute, expirationDateMonth,
-				expirationDateDay, expirationDateYear,expirationDateHour,
+				expirationDateDay, expirationDateYear, expirationDateHour,
 				expirationDateMinute, priority, alert);
 		}
 		else {
@@ -143,6 +136,5 @@ public class AnnouncementsPortlet extends MVCPortlet {
 				priority);
 		}
 	}
-
 
 }
