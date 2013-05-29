@@ -67,7 +67,6 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 		PortletURL iteratorURL = PortletURLUtil.clone(portletURL, renderResponse);
 
 		iteratorURL.setParameter("distributionScope", distributionScope);
-
 		iteratorURL.setParameter("mvcPath", "/manage_entries.jsp");
 
 		List<String> headerNames = new ArrayList<String>();
@@ -156,14 +155,14 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 </aui:form>
 
 <%
-	portletURL.setParameter("windowState", LiferayWindowState.POP_UP.toString());
 	portletURL.setParameter("mvcPath", "/manage_entries.jsp");
+	portletURL.setWindowState(LiferayWindowState.POP_UP);
 
 	PortletURL addEntryURL = PortletURLUtil.clone(portletURL, renderResponse);
 	addEntryURL.setParameter("fromManageEntries", "true");
 	addEntryURL.setParameter("mvcPath", "/edit_entry.jsp");
 	addEntryURL.setParameter("redirect", currentURL);
-	addEntryURL.setParameter("windowState", LiferayWindowState.POP_UP.toString());
+	addEntryURL.setWindowState(LiferayWindowState.POP_UP);
 %>
 
 <aui:script>
