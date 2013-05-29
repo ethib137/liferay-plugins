@@ -22,17 +22,23 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
+import com.liferay.portal.kernel.util.PropsKeys;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Time;
+import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserGroupLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 
 import java.text.Format;
@@ -119,7 +125,7 @@ public class AnnouncementsUtil {
 
 		// Role announcements
 
-		List<Role> roles = new ArrayList<Role>();
+		List<Role> roles = new UniqueList<Role>();
 
 		if (!groupsList.isEmpty()) {
 			roles = RoleLocalServiceUtil.getUserRelatedRoles(
@@ -138,6 +144,20 @@ public class AnnouncementsUtil {
 		}
 		else {
 			roles = RoleLocalServiceUtil.getUserRoles(userId);
+
+			roles = ListUtil.copy(roles);
+		}
+
+		Boolean permissionCheckGuestEnabled = GetterUtil.getBoolean(
+			PropsUtil.get(PropsKeys.PERMISSIONS_CHECK_GUEST_ENABLED));
+
+		if (permissionCheckGuestEnabled) {
+			User user = UserLocalServiceUtil.getUserById(userId);
+
+			Role guestRole = RoleLocalServiceUtil.getRole(
+				user.getCompanyId(), RoleConstants.GUEST);
+
+			roles.add(guestRole);
 		}
 
 		if (roles.size() > 0) {
