@@ -190,6 +190,11 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 				dialog: {
 					align: Liferay.Util.Window.ALIGN_CENTER,
 					modal: modal,
+					on: {
+						close: function() {
+							Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+						}
+					},
 					width: width
 				},
 				cache: false,
