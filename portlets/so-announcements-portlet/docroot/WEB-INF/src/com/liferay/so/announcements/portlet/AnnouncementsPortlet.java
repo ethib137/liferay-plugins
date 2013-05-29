@@ -19,7 +19,6 @@ package com.liferay.so.announcements.portlet;
 
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -41,7 +40,6 @@ import java.util.Calendar;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
-import javax.portlet.PortletURL;
 
 /**
  * @author Raymond Augé
@@ -106,7 +104,6 @@ public class AnnouncementsPortlet extends MVCPortlet {
 
 			jsonObject.put(
 				"redirect", ParamUtil.getString(actionRequest, "redirect"));
-
 			jsonObject.put("success", true);
 
 			String fromManageEntries = ParamUtil.getString(
@@ -117,27 +114,20 @@ public class AnnouncementsPortlet extends MVCPortlet {
 			}
 		}
 		catch (Exception e) {
-			ThemeDisplay themeDisplay =
-				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
-
-			String message = "your-request-failed-to-complete";
+			String message = null;
 
 			if (e instanceof EntryContentException) {
 				message = "please-enter-valid-content";
 			}
-
 			else if (e instanceof EntryDisplayDateException) {
 				message = "please-enter-a-valid-display-date";
 			}
-
 			else if (e instanceof EntryExpirationDateException) {
 				message = "please-enter-a-valid-expiration-date";
 			}
-
 			else if (e instanceof EntryTitleException) {
 				message = "please-enter-a-valid-title";
 			}
-
 			else if (e instanceof EntryURLException) {
 				message = "please-enter-a-valid-url";
 			}
@@ -148,7 +138,6 @@ public class AnnouncementsPortlet extends MVCPortlet {
 			SessionErrors.clear(actionRequest);
 
 			jsonObject.put("message", translate(actionRequest, message));
-
 			jsonObject.put("success", false);
 		}
 
@@ -200,9 +189,6 @@ public class AnnouncementsPortlet extends MVCPortlet {
 			displayDateHour += 12;
 		}
 
-		boolean autoDisplayDate = ParamUtil.getBoolean(
-			actionRequest, "autoDisplayDate");
-
 		int expirationDateMonth = ParamUtil.getInteger(
 			actionRequest, "expirationDateMonth");
 		int expirationDateDay = ParamUtil.getInteger(
@@ -245,37 +231,6 @@ public class AnnouncementsPortlet extends MVCPortlet {
 				expirationDateYear, expirationDateHour, expirationDateMinute,
 				priority);
 		}
-	}
-
-	protected String getRenderURL(
-			ActionRequest actionRequest, ActionResponse actionResponse)
-		throws Exception {
-
-		LiferayPortletResponse liferayPortletResponse =
-			(LiferayPortletResponse)actionResponse;
-
-		PortletURL portletURL = liferayPortletResponse.createRenderURL();
-
-		portletURL.setParameter("mvcPath", "/edit_entry.jsp");
-		portletURL.setParameter(
-			"redirect", ParamUtil.getString(actionRequest, "redirect"));
-		portletURL.setParameter(
-			"distributionScope",
-			ParamUtil.getString(actionRequest, "distributionScope"));
-		portletURL.setParameter(
-			"title", ParamUtil.getString(actionRequest, "title"));
-		portletURL.setParameter(
-			"content", ParamUtil.getString(actionRequest, "content"));
-		portletURL.setParameter(
-			"url", ParamUtil.getString(actionRequest, "url"));
-		portletURL.setParameter(
-			"type", ParamUtil.getString(actionRequest, "type"));
-		portletURL.setParameter(
-			"priority", ParamUtil.getString(actionRequest, "priority"));
-		portletURL.setParameter(
-			"alert", ParamUtil.getString(actionRequest, "alert"));
-
-		return portletURL.toString();
 	}
 
 }

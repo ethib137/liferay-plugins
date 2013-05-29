@@ -60,11 +60,7 @@ int total = 0;
 	<%@ include file="/entry_iterator.jspf" %>
 </div>
 
-<%
-int visibleMessagesCount = total;
-%>
-
-<c:if test="<%= visibleMessagesCount > 0 %>">
+<c:if test="<%= total > 0 %>">
 	<liferay-ui:search-paginator id="pageIteratorTop" searchContainer="<%= searchContainer %>" type="article" />
 </c:if>
 
@@ -84,13 +80,7 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 		<div class="content aui-toggler-content aui-toggler-content-collapsed">
 			<%@ include file="/entry_iterator.jspf" %>
 
-			<%
-			int hiddenMessagesCount = total;
-
-			String distributionScope = ParamUtil.getString(request, "distributionScope");
-			%>
-
-			<c:if test="<%= hiddenMessagesCount > 0 %>">
+			<c:if test="<%= total > 0 %>">
 				<liferay-ui:search-paginator id="pageIteratorBottom" searchContainer="<%= searchContainer %>" type="article" />
 			</c:if>
 		</div>

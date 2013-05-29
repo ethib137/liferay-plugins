@@ -20,11 +20,9 @@
 <%@ include file="/entry_scope.jspf" %>
 
 <%
-boolean hiddenEntry = false;
 boolean readEntry = false;
 
 if (flagValue == AnnouncementsFlagConstants.READ) {
-	hiddenEntry = true;
 	readEntry = true;
 }
 else {
@@ -53,19 +51,26 @@ try {
 catch (Exception e) {
 }
 
-String entryUserLink = "<a href=\"" + entryUser.getDisplayURL(themeDisplay) + "\">" + entryUser.getFullName() + "</a>";
+StringBundler entryUserLink = new StringBundler(5);
+
+entryUserLink.append("<a href=\"");
+entryUserLink.append(entryUser.getDisplayURL(themeDisplay));
+entryUserLink.append("\">");
+entryUserLink.append(entryUser.getFullName());
+entryUserLink.append("</a>");
+
 String scopeNameSpan = "<span class=\"scope\">" + scopeName + "</span>";
 
-Object[] titleArguments = new Object[] {entryUserLink, scopeNameSpan};
+Object[] titleArguments = new Object[] {entryUserLink.toString(), scopeNameSpan};
 %>
 
 <div class="entry<%= className %>" id="<portlet:namespace /><%= entry.getEntryId() %>">
 	<div class="user-portrait">
-				<span class="avatar">
-					<a href="<%= entryUser.getDisplayURL(themeDisplay) %>">
-						<img alt="<%= entryUser.getFullName() %>" src="<%= entryUser.getPortraitURL(themeDisplay) %>" />
-					</a>
-				</span>
+		<span class="avatar">
+			<a href="<%= entryUser.getDisplayURL(themeDisplay) %>">
+				<img alt="<%= entryUser.getFullName() %>" src="<%= entryUser.getPortraitURL(themeDisplay) %>" />
+			</a>
+		</span>
 	</div>
 
 	<div class="entry-data">

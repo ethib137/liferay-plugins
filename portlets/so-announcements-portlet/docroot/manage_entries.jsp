@@ -67,7 +67,6 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 		PortletURL iteratorURL = PortletURLUtil.clone(portletURL, renderResponse);
 
 		iteratorURL.setParameter("distributionScope", distributionScope);
-
 		iteratorURL.setParameter("mvcPath", "/manage_entries.jsp");
 
 		List<String> headerNames = new ArrayList<String>();
@@ -97,31 +96,23 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 
 			entry = entry.toEscapedModel();
 
-			User entryUser = null;
-
-			try {
-				entryUser = UserLocalServiceUtil.getUserById(entry.getUserId());
-			}
-			catch (Exception e) {
-			}
-
 			ResultRow row = new ResultRow(entry, entry.getEntryId(), i);
-		%>
-
-			<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-				<portlet:param name="mvcPath" value="/edit_entry.jsp" />
-				<portlet:param name="redirect" value="<%= currentURL %>" />
-				<portlet:param name="fromManageEntries" value="true" />
-				<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
-			</portlet:renderURL>
-
-		<%
 
 			// Title
 
-			row.addText(entry.getTitle(), editURL);
+			PortletURL editURL = renderReponse.createRenderURL();
+
+			editURL.setParameter("mvcPath", "/edit_entry.jsp");
+			editURL.setParameter("redirect", currentURL);
+			editURL.setParameter("fromManageEntries", "true");
+			editURL.setParameter("entryId", String.valueOf(entry.getEntryId()));
+			editURL.setWindowState(LiferayWindowState.POP_UP);
+
+			row.addText(entry.getTitle(), editURL.toString());
 
 			// Author
+
+			User entryUser = UserLocalServiceUtil.fetchUserById(entry.getUserId());
 
 			row.addText(entryUser.getFullName());
 
@@ -156,14 +147,15 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 </aui:form>
 
 <%
-	portletURL.setParameter("windowState", LiferayWindowState.POP_UP.toString());
-	portletURL.setParameter("mvcPath", "/manage_entries.jsp");
+portletURL.setParameter("mvcPath", "/manage_entries.jsp");
+portletURL.setWindowState(LiferayWindowState.POP_UP);
 
-	PortletURL addEntryURL = PortletURLUtil.clone(portletURL, renderResponse);
-	addEntryURL.setParameter("fromManageEntries", "true");
-	addEntryURL.setParameter("mvcPath", "/edit_entry.jsp");
-	addEntryURL.setParameter("redirect", currentURL);
-	addEntryURL.setParameter("windowState", LiferayWindowState.POP_UP.toString());
+PortletURL addEntryURL = PortletURLUtil.clone(portletURL, renderResponse);
+
+addEntryURL.setParameter("fromManageEntries", "true");
+addEntryURL.setParameter("mvcPath", "/edit_entry.jsp");
+addEntryURL.setParameter("redirect", currentURL);
+addEntryURL.setWindowState(LiferayWindowState.POP_UP);
 %>
 
 <aui:script>

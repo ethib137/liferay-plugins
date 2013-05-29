@@ -31,7 +31,7 @@
 					<liferay-ui:icon
 						image="edit"
 						label="<%= true %>"
-						/>
+					/>
 				</a>
 			</span>
 		</c:if>
@@ -79,7 +79,9 @@
 	}
 	else {
 		var contentContainer = document.getElementById('entryContentContainer<%= entry.getEntryId() %>');
+
 		contentContainer.style.height = 'auto';
+
 		toggle.parentNode.removeChild(toggle);
 	}
 
@@ -87,6 +89,7 @@
 
 	if (editActions._node.children.length == 0) {
 		var footer = entry.one('.entry-footer');
+
 		footer.empty();
 	}
 </aui:script>

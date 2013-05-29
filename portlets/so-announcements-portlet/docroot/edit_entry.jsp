@@ -52,10 +52,6 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 		<c:choose>
 			<c:when test="<%= entry != null %>">
 
-				<%
-				boolean showScopeName = true;
-				%>
-
 				<%@ include file="/entry_scope.jspf" %>
 
 				<aui:input name="scope" type="hidden" value="<%= scopeName %>" />
@@ -89,7 +85,7 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 			for (String curType : AnnouncementsEntryConstants.TYPES) {
 			%>
 
-			<aui:option label="<%= curType %>" />
+				<aui:option label="<%= curType %>" />
 
 			<%
 			}

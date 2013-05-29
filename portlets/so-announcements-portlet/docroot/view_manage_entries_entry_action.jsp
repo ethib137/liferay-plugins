@@ -38,7 +38,7 @@ AnnouncementsEntry entry = (AnnouncementsEntry)row.getObject();
 			<liferay-ui:icon
 				image="edit"
 				label="<%= true %>"
-				/>
+			/>
 		</a>
 	</span>
 </c:if>
@@ -53,6 +53,6 @@ AnnouncementsEntry entry = (AnnouncementsEntry)row.getObject();
 		<liferay-ui:icon-delete
 			label="<%= true %>"
 			url="<%= deleteURL %>"
-			/>
+		/>
 	</span>
 </c:if>

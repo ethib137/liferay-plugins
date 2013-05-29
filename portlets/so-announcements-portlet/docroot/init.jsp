@@ -30,6 +30,7 @@ page import="com.liferay.portal.kernel.util.FastDateFormatFactoryUtil" %><%@
 page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
+page import="com.liferay.portal.kernel.util.StringBundler" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
 page import="com.liferay.portal.kernel.util.UnicodeFormatter" %><%@
@@ -53,6 +54,7 @@ page import="com.liferay.portal.service.permission.OrganizationPermissionUtil" %
 page import="com.liferay.portal.service.permission.RolePermissionUtil" %><%@
 page import="com.liferay.portal.service.permission.UserGroupPermissionUtil" %><%@
 page import="com.liferay.portal.util.PortalUtil" %><%@
+page import="com.liferay.portal.util.PortletKeys" %><%@
 page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %><%@
 page import="com.liferay.portlet.PortletURLUtil" %><%@
 page import="com.liferay.portlet.announcements.NoSuchFlagException" %><%@
@@ -62,8 +64,7 @@ page import="com.liferay.portlet.announcements.model.AnnouncementsFlag" %><%@
 page import="com.liferay.portlet.announcements.model.AnnouncementsFlagConstants" %><%@
 page import="com.liferay.portlet.announcements.service.AnnouncementsEntryLocalServiceUtil" %><%@
 page import="com.liferay.portlet.announcements.service.AnnouncementsFlagLocalServiceUtil" %><%@
-page import="com.liferay.so.announcements.util.AnnouncementsUtil" %><%@
-page import="com.liferay.so.announcements.util.PortletKeys" %>
+page import="com.liferay.so.announcements.util.AnnouncementsUtil" %>
 
 <%@ page import="java.text.Format" %>
 
