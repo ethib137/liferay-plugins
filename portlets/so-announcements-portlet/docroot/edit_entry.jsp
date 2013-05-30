@@ -128,7 +128,37 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 	</aui:button-row>
 </aui:form>
 
-<div class="entry" id="<%= renderResponse.getNamespace() + "preview" %>"></div>
+<div class="entry aui-helper-hidden" id="<%= renderResponse.getNamespace() + "preview" %>">
+	<div class="user-portrait">
+		<span class="avatar">
+			<a href="<%= currentUser.getDisplayURL(themeDisplay) %>">
+				<img alt="<%= currentUser.getFullName() %>" src="<%= currentUser.getPortraitURL(themeDisplay) %>" />
+			</a>
+		</span>
+	</div>
+
+	<div class="entry-data">
+		<div class="entry-header">
+			<div class="entry-time">
+				<%= LanguageUtil.get(pageContext, "about-a-minute-ago") %>
+			</div>
+
+			<div class="entry-user-name">
+				<a href="<%= currentUser.getDisplayURL(themeDisplay) %>"><%= currentUser.getFullName() %></a> to <span class="scope" id="<%= renderResponse.getNamespace() + "scope" %>"></span>
+			</div>
+		</div>
+
+		<div class="entry-body">
+			<div class="title" id="<%= renderResponse.getNamespace() + "title" %>"></div>
+
+			<div class="entry-content-container" id="<%= renderResponse.getNamespace() + "entryContentContainer" %>">
+				<div class="entry-content" id="<%= renderResponse.getNamespace() + "entryContent" %>"></div>
+			</div>
+		</div>
+
+		<div class="entry-footer" id="<%= renderResponse.getNamespace() + "entryFooter" %>"></div>
+	</div>
+</div>
 
 <aui:script>
 	function initEditor() {
@@ -145,11 +175,19 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 	function <portlet:namespace />previewEntry() {
 		var A = AUI();
 
-		var preview = document.getElementById('<portlet:namespace />preview');
+		var preview = A.one('#<portlet:namespace />preview');
+
+		if (preview.hasClass('aui-helper-hidden')) {
+			preview.removeClass('aui-helper-hidden');
+		}
+
 		var priority = A.one('#priority')._node.selectedIndex;
 
 		if (priority == 1) {
-			preview.className = 'important-entry';
+			preview.addClass('important-entry');
+		}
+		else {
+			preview.removeClass('important-entry');
 		}
 
 		if (<%= entry != null %>) {
@@ -160,6 +198,8 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 			var scope = A.one('option[value=' + optValue + ']').get('text');
 		}
 
+		A.one('#<portlet:namespace />scope').html(scope);
+
 		var url = A.one('#url').get('value');
 
 		if (url.length != 0) {
@@ -169,61 +209,24 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 			var title = A.one('#title').get('value');
 		}
 
+		A.one('#<portlet:namespace />title').html(title);
+
 		var content = window.editor.getHTML();
 
-		preview.innerHTML="<div class='user-portrait'>"
-				+ "<span class='avatar'>"
-					+ "<a href='<%= currentUser.getDisplayURL(themeDisplay) %>'>"
-						+ "<img alt='<%= currentUser.getFullName() %>' src='<%= currentUser.getPortraitURL(themeDisplay) %>' />"
-					+ "</a>"
-				+ "</span>"
-			+ "</div>"
-		+ "<div class='entry-data'>"
-			+ "<div class='entry-header'>"
-				+ "<div class='entry-time'>"
-					+ Liferay.Language.get('about-a-minute-ago')
-				+ "</div>"
-				+ "<div class='entry-user-name'>"
-					+ "<a href='<%= currentUser.getDisplayURL(themeDisplay) %>'>" + themeDisplay.getUserName() + "</a> to <span class='scope'>" + scope + "</span>"
-				+ "</div>"
-			+ "</div>"
-			+ "<div class='entry-body'>"
-				+ "<div class='title'>"
-					+ title
-				+ "</div>"
-				+ "<div class='entry-content-container' id='previewEntryContentContainer'>"
-					+ "<div class='entry-content'>"
-							+ content
-					+ "</div>"
-				+ "</div>"
-			+ "</div>"
-			+ "<div class='entry-footer'>"
-				+ "<div class='entry-footer-toolbar'>"
-					+ "<div class='edit-actions'>"
-						+ "<span class='action' id='toggle-entryPreview'></span>"
-					+ "</div>"
-				+ "</div>"
-			+ "</div>"
-		+ "</div>";
+		var previewContent = A.one('#<portlet:namespace />entryContent');
 
-		var previewContent = A.one('#<portlet:namespace />preview .entry-content');
-		var toggle = document.getElementById('toggle-entryPreview');
+		previewContent.html(content);
+
+		var previewFooter = A.one('#<portlet:namespace />entryFooter');
+		var previewContentContainer = document.getElementById('<portlet:namespace />entryContentContainer');
 
 		if (previewContent.height() > 75) {
-			toggle.innerHTML='<a class="toggle-entry" data-entryId="preview" href="javascript:;"><liferay-ui:message key='view-more' /></a>';
-			toggle.className = 'action';
+			previewFooter.html('<div class="entry-footer-toolbar"><div class="edit-actions"><span class="action" id="toggleEntryPreview"><a class="toggle-entry" data-entryId="preview" href="javascript:;"><liferay-ui:message key='view-more' /></a></span></div></div>');
+			previewContentContainer.style.height = '75px';
 		}
 		else {
-			var contentContainer = document.getElementById('previewEntryContentContainer');
-			contentContainer.style.height = 'auto';
-			toggle.parentNode.removeChild(toggle);
-		}
-
-		var editActions = A.one('#<portlet:namespace />preview .edit-actions');
-
-		if (editActions._node.children.length == 0) {
-			var footer = A.one('#<portlet:namespace />preview .entry-footer');
-			footer.empty();
+			previewContentContainer.style.height = 'auto';
+			previewFooter.empty();
 		}
 	}
 
