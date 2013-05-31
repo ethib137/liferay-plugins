@@ -110,7 +110,7 @@ public class AnnouncementsPortlet extends MVCPortlet {
 				actionRequest, "fromManageEntries");
 
 			if (Validator.isNotNull(fromManageEntries)) {
-				jsonObject.put("fromManageEntries", true);
+				jsonObject.put("fromManageEntries", fromManageEntries);
 			}
 		}
 		catch (Exception e) {
