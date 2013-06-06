@@ -132,29 +132,43 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 
 			if (container) {
 				if (container.hasClass('unread-entries')) {
-					<portlet:namespace />markEntry(entry, entryId);
+					<portlet:namespace />markEntry(entryId);
 				}
 				else {
-					<portlet:namespace />unmarkEntry(entry, entryId);
+					<portlet:namespace />unmarkEntry(entryId);
 				}
 			}
 		}
 	}
 
-	function <portlet:namespace />markEntry(entry, entryId) {
-		var A = AUI();
-
-		Liferay.Service.Announcements.AnnouncementsFlag.addFlag({entryId : entryId, flag: <%= AnnouncementsFlagConstants.HIDDEN %>});
+	function <portlet:namespace />markEntry(entryId) {
+		Liferay.Service(
+			'/announcementsflag/add-flag',
+			{
+				entryId : entryId,
+				value: <%= AnnouncementsFlagConstants.HIDDEN %>
+			}
+		);
 
 		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
 	}
 
-	function <portlet:namespace />unmarkEntry(entry, entryId) {
-		var A = AUI();
-
-		flag = Liferay.Service.Announcements.AnnouncementsFlag.getFlag({entryId : entryId, flag: <%= AnnouncementsFlagConstants.HIDDEN %>});
-
-		Liferay.Service.Announcements.AnnouncementsFlag.deleteFlag({flag: flag.flagId});
+	function <portlet:namespace />unmarkEntry(entryId) {
+		Liferay.Service(
+			'/announcementsflag/get-flag',
+			{
+				entryId : entryId,
+				value: <%= AnnouncementsFlagConstants.HIDDEN %>
+			},
+			function(response) {
+				Liferay.Service(
+					'/announcementsflag/delete-flag',
+					{
+						flagId: response.flagId
+					}
+				);
+			}
+		);
 
 		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
 	}
