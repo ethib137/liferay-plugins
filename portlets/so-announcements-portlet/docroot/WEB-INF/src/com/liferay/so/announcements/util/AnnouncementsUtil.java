@@ -167,43 +167,6 @@ public class AnnouncementsUtil {
 		return scopes;
 	}
 
-	public static String getRelativeTimeDescription(
-		Date date, Locale locale, TimeZone timeZone) {
-
-		long milliseconds = date.getTime();
-
-		Format timeFormat = FastDateFormatFactoryUtil.getTime(locale, timeZone);
-
-		int daysBetween = DateUtil.getDaysBetween(
-			new Date(milliseconds), new Date(), timeZone);
-
-		long millisAgo = System.currentTimeMillis() - milliseconds;
-
-		if (millisAgo <= Time.MINUTE) {
-			return LanguageUtil.get(locale, "about-a-minute-ago");
-		}
-		else if (millisAgo < Time.HOUR) {
-			return LanguageUtil.format(
-				locale, "x-minutes-ago", (millisAgo / Time.MINUTE));
-		}
-		else if ((millisAgo / Time.HOUR) == 1) {
-			return LanguageUtil.get(locale, "about-an-hour-ago");
-		}
-		else if ((millisAgo < Time.DAY) || (daysBetween == 0)) {
-			return LanguageUtil.format(
-				locale, "x-hours-ago", (millisAgo / Time.HOUR));
-		}
-		else if (daysBetween == 1) {
-			return LanguageUtil.format(
-				locale, "yesterday-at-x", timeFormat.format(milliseconds));
-		}
-
-		Format dateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
-			"EEEE, MMMMM dd, yyyy", locale, timeZone);
-
-		return dateFormat.format(milliseconds);
-	}
-
 	private static long[] _getGroupIds(List<Group> groups) {
 		long[] groupIds = new long[groups.size()];
 
