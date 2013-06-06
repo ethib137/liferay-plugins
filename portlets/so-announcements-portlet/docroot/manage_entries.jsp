@@ -161,12 +161,15 @@ addEntryURL.setWindowState(LiferayWindowState.POP_UP);
 <aui:script>
 	function <portlet:namespace />selectDistributionScope(distributionScope) {
 		var url = "<%= portletURL.toString() %>&<portlet:namespace />distributionScope=" + distributionScope;
+
 		submitForm(document.<portlet:namespace />fm, url);
 	}
 
 	function <portlet:namespace />manageAddEntry() {
 		var A = AUI();
+
 		var optValue = A.one('select[name="<portlet:namespace />distributionScope"]').get('value');
+
 		var addEntryURL = "<%= addEntryURL.toString() %>&distributionScope=" + optValue;
 
 		window.location = addEntryURL;

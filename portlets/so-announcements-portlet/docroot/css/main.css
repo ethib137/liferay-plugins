@@ -162,13 +162,14 @@
 	select {
 		margin: 0;
 	}
+
 	.display-date, .distribution-scope, .expiration-date, .priority, .type, .title, .url {
 		.aui-field-content {
 			display: inline-block;
 		}
 	}
 
-	.distribution-scope, .type, .title, .display-date {
+	.display-date, .distribution-scope, .title, .type {
 		.aui-field-content {
 			margin-right: 1em;
 		}

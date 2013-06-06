@@ -22,9 +22,9 @@
 		<c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.UPDATE) %>">
 			<span class="action edit-entry">
 				<portlet:renderURL var="editURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
 					<portlet:param name="mvcPath" value="/edit_entry.jsp" />
 					<portlet:param name="redirect" value="<%= currentURL %>" />
-					<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
 				</portlet:renderURL>
 
 				<a href="<%= "javascript:" + renderResponse.getNamespace() + "editEntry('" + editURL.toString() + "');" %>">
@@ -39,8 +39,8 @@
 		<c:if test="<%= permissionChecker.hasPermission(entry.getGroupId(), AnnouncementsEntry.class.getName(), entry.getClassPK(), ActionKeys.DELETE) %>">
 			<span class="action delete-entry">
 				<liferay-portlet:actionURL name="deleteEntry" var="deleteURL">
-					<portlet:param name="redirect" value="<%= currentURL %>" />
 					<portlet:param name="entryId" value="<%= String.valueOf(entry.getEntryId()) %>" />
+					<portlet:param name="redirect" value="<%= currentURL %>" />
 				</liferay-portlet:actionURL>
 
 				<liferay-ui:icon-delete
@@ -70,12 +70,13 @@
 
 <aui:script use="aui-base">
 	var entry = A.one('#<portlet:namespace /><%= entry.getEntryId() %>');
+
 	var content = entry.one('.entry-content');
 	var toggle = document.getElementById('toggleEntry<%= entry.getEntryId() %>');
 
 	if (content.height() > 75) {
-		toggle.innerHTML='<a class="toggle-entry" data-entryId="<%= entry.getEntryId() %>" href="javascript:;"><span><liferay-ui:message key='view-more' /></span></a>';
 		toggle.className = 'action';
+		toggle.innerHTML='<a class="toggle-entry" data-entryId="<%= entry.getEntryId() %>" href="javascript:;"><span><liferay-ui:message key='view-more' /></span></a>';
 	}
 	else {
 		var contentContainer = document.getElementById('entryContentContainer<%= entry.getEntryId() %>');

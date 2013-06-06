@@ -77,6 +77,7 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 		<div class="header">
 			<span><%= LanguageUtil.get(pageContext, "read-entries") %></span>
 		</div>
+
 		<div class="content aui-toggler-content aui-toggler-content-collapsed">
 			<%@ include file="/entry_iterator.jspf" %>
 
@@ -177,6 +178,7 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 	function <portlet:namespace />openWindow(url, title, modal, width) {
 		Liferay.Util.openWindow(
 			{
+				cache: false,
 				dialog: {
 					align: Liferay.Util.Window.ALIGN_CENTER,
 					modal: modal,
@@ -187,7 +189,6 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 					},
 					width: width
 				},
-				cache: false,
 				id: '<portlet:namespace />Dialog',
 				title: title,
 				uri: url

@@ -90,9 +90,9 @@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 <liferay-theme:defineObjects />
 
 <%
-	String currentURL = PortalUtil.getCurrentURL(request);
+String currentURL = PortalUtil.getCurrentURL(request);
 
-	PortletURL portletURL = renderResponse.createRenderURL();
+PortletURL portletURL = renderResponse.createRenderURL();
 
-	Format dateFormatDate = FastDateFormatFactoryUtil.getSimpleDateFormat("MMM d, yyyy", locale, timeZone);
+Format dateFormatDate = FastDateFormatFactoryUtil.getSimpleDateFormat("MMM d, yyyy", locale, timeZone);
 %>

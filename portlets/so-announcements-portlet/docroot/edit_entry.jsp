@@ -35,10 +35,10 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 <div id="<portlet:namespace />errorMessage"></div>
 
 <aui:form method="post" name='<%= renderResponse.getNamespace() + "fm" %>' onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveEntry();" %>' useNamespace="false">
-	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (entry == null) ? Constants.ADD : Constants.UPDATE %>" />
-	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
-	<aui:input name="entryId" type="hidden" value="<%= entryId %>" />
 	<aui:input name="alert" type="hidden" value="<%= portletName.equals(PortletKeys.ALERTS) %>" />
+	<aui:input name="entryId" type="hidden" value="<%= entryId %>" />
+	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= (entry == null) ? Constants.ADD : Constants.UPDATE %>" />
 
 	<aui:model-context bean="<%= entry %>" model="<%= AnnouncementsEntry.class %>" />
 
@@ -163,6 +163,7 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 <aui:script>
 	function initEditor() {
 		var ckEditor = CKEDITOR.instances["editor"];
+
 		ckEditor.resize("100%", "200");
 
 		return '<%= UnicodeFormatter.toString(content) %>';
@@ -217,12 +218,12 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 
 		previewContent.html(content);
 
-		var previewFooter = A.one('#<portlet:namespace />entryFooter');
 		var previewContentContainer = document.getElementById('<portlet:namespace />entryContentContainer');
+		var previewFooter = A.one('#<portlet:namespace />entryFooter');
 
 		if (previewContent.height() > 75) {
-			previewFooter.html('<div class="entry-footer-toolbar"><div class="edit-actions"><span class="action" id="toggleEntryPreview"><a class="toggle-entry" data-entryId="preview" href="javascript:;"><liferay-ui:message key='view-more' /></a></span></div></div>');
 			previewContentContainer.style.height = '75px';
+			previewFooter.html('<div class="entry-footer-toolbar"><div class="edit-actions"><span class="action" id="toggleEntryPreview"><a class="toggle-entry" data-entryId="preview" href="javascript:;"><liferay-ui:message key='view-more' /></a></span></div></div>');
 		}
 		else {
 			previewContentContainer.style.height = 'auto';
@@ -235,9 +236,9 @@ User currentUser = UserLocalServiceUtil.getUserById(themeDisplay.getUserId());
 
 		var form = document.<portlet:namespace />fm;
 
+		form.content.value = window.editor.getHTML();
 		form.target = '';
 		form.<%= Constants.CMD %>.value = "<%= (entry == null) ? Constants.ADD : Constants.UPDATE %>";
-		form.content.value = window.editor.getHTML();
 
 		var uri = '<liferay-portlet:actionURL name="saveEntry"><portlet:param name="redirect" value="<%= currentURL %>" /></liferay-portlet:actionURL>';
 

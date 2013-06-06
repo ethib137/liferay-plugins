@@ -43,13 +43,8 @@ if (readEntry) {
 if (entry.getPriority() > 0) {
 	className += " important-entry";
 }
-User entryUser = null;
 
-try {
-	entryUser = UserLocalServiceUtil.getUserById(entry.getUserId());
-}
-catch (Exception e) {
-}
+User entryUser = UserLocalServiceUtil.fetchUserById(entry.getUserId());
 
 StringBundler entryUserLink = new StringBundler(5);
 
@@ -78,6 +73,7 @@ Object[] titleArguments = new Object[] {entryUserLink.toString(), scopeNameSpan}
 			<div class="entry-time">
 				<%= AnnouncementsUtil.getRelativeTimeDescription(entry.getDisplayDate(), locale, themeDisplay.getTimeZone()) %>
 			</div>
+
 			<div class="entry-action">
 				<%= LanguageUtil.format(pageContext, "x-to-x", titleArguments) %>
 			</div>
@@ -94,6 +90,7 @@ Object[] titleArguments = new Object[] {entryUserLink.toString(), scopeNameSpan}
 					</c:otherwise>
 				</c:choose>
 			</div>
+
 			<div class="entry-content-container" id="entryContentContainer<%= entry.getEntryId() %>">
 				<div class="entry-content">
 					<%= entry.getContent() %>
