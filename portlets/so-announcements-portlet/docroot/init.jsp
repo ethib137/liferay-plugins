@@ -64,7 +64,7 @@ page import="com.liferay.portlet.announcements.model.AnnouncementsEntryConstants
 page import="com.liferay.portlet.announcements.model.AnnouncementsFlagConstants" %><%@
 page import="com.liferay.portlet.announcements.service.AnnouncementsEntryLocalServiceUtil" %><%@
 page import="com.liferay.portlet.announcements.service.AnnouncementsFlagLocalServiceUtil" %><%@
-page import="com.liferay.so.announcements.util.AnnouncementsUtil" %>
+page import="com.liferay.portlet.announcements.util.AnnouncementsUtil" %>
 
 <%@ page import="java.text.Format" %>
 
