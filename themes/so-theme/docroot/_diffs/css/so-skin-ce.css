@@ -550,6 +550,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	padding: 0;
 }
 
+.aui-inputmoveboxes .aui-field-select {
+	display: inline-block;
+}
+
 .lfr-label {
 	color: #999;
 	font-size: 11px;

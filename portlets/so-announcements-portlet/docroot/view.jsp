@@ -24,7 +24,35 @@ PortletURL portletURL = renderResponse.createRenderURL();
 
 portletURL.setParameter("mvcPath", "/view.jsp");
 
-LinkedHashMap<Long, long[]> scopes = AnnouncementsUtil.getAnnouncementScopes(user.getUserId());
+LinkedHashMap<Long, long[]> scopes = new LinkedHashMap<Long, long[]>();
+
+Boolean customizeAnnouncementsDisplayed = PrefsParamUtil.getBoolean(preferences, request, "customizeAnnouncementsDisplayed", layout.getGroup().isUser() ? false : true);
+
+long[] selectedScopeRoles = GetterUtil.getLongValues(StringUtil.split(PrefsParamUtil.getString(preferences, request, "selectedScopeRoles", "")));
+long[] selectedScopeGroups = GetterUtil.getLongValues(StringUtil.split(PrefsParamUtil.getString(preferences, request, "selectedScopeGroups", String.valueOf(layout.getGroupId()))));
+long[] selectedScopeOrganizations = GetterUtil.getLongValues(StringUtil.split(PrefsParamUtil.getString(preferences, request, "selectedScopeOrganizations", "")));
+long[] selectedScopeUserGroups = GetterUtil.getLongValues(StringUtil.split(PrefsParamUtil.getString(preferences, request, "selectedScopeUserGroups", "")));
+
+if (customizeAnnouncementsDisplayed) {
+	if (selectedScopeRoles.length != 0) {
+		scopes.put(PortalUtil.getClassNameId(Role.class.getName()), selectedScopeRoles);
+	}
+
+	if (selectedScopeGroups.length != 0) {
+		scopes.put(PortalUtil.getClassNameId(Group.class.getName()), selectedScopeGroups);
+	}
+
+	if (selectedScopeOrganizations.length != 0) {
+		scopes.put(PortalUtil.getClassNameId(Organization.class.getName()), selectedScopeOrganizations);
+	}
+
+	if (selectedScopeUserGroups.length != 0) {
+		scopes.put(PortalUtil.getClassNameId(UserGroup.class.getName()), selectedScopeUserGroups);
+	}
+}
+else {
+	scopes = AnnouncementsUtil.getAnnouncementScopes(user.getUserId());
+}
 
 scopes.put(new Long(0), new long[] {0});
 
