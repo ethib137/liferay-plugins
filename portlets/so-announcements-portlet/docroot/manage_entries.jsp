@@ -100,7 +100,7 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 
 			// Title
 
-			PortletURL editURL = renderReponse.createRenderURL();
+			PortletURL editURL = renderResponse.createRenderURL();
 
 			editURL.setParameter("mvcPath", "/edit_entry.jsp");
 			editURL.setParameter("redirect", currentURL);
