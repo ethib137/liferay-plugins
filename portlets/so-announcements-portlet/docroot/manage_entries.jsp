@@ -20,6 +20,8 @@
 <%@ include file="/init.jsp" %>
 
 <%
+PortletURL portletURL = renderResponse.createRenderURL();
+
 String distributionScope = ParamUtil.getString(request, "distributionScope");
 
 long classNameId = -1;

@@ -20,6 +20,8 @@
 <%@ include file="/init.jsp" %>
 
 <%
+PortletURL portletURL = renderResponse.createRenderURL();
+
 portletURL.setParameter("mvcPath", "/view.jsp");
 
 LinkedHashMap<Long, long[]> scopes = AnnouncementsUtil.getAnnouncementScopes(user.getUserId());
@@ -27,16 +29,6 @@ LinkedHashMap<Long, long[]> scopes = AnnouncementsUtil.getAnnouncementScopes(use
 scopes.put(new Long(0), new long[] {0});
 
 int flagValue = AnnouncementsFlagConstants.NOT_HIDDEN;
-
-PortletPreferences preferences = renderRequest.getPreferences();
-
-String portletResource = ParamUtil.getString(request, "portletResource");
-
-if (Validator.isNotNull(portletResource)) {
-	preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
-}
-
-int pageDelta = GetterUtil.getInteger(preferences.getValue("pageDelta", String.valueOf(SearchContainer.DEFAULT_DELTA)));
 
 SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, "cur1", pageDelta, portletURL, null, "there-are-currently-no-unread-entries");
 
