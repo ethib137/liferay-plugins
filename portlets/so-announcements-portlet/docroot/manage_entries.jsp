@@ -136,7 +136,7 @@ if ((classNameId == 0) && (classPK == 0) && !permissionChecker.isOmniadmin()) {
 
 			// Action
 
-			row.addJSP("/view_manage_entries_entry_action.jsp", application, request, response);
+			row.addJSP("/manage_entries_entry_action.jsp", application, request, response);
 
 			// Add result row
 
