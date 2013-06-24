@@ -26,25 +26,55 @@
 <c:if test="<%= permissionChecker.isGroupAdmin(layout.getGroupId()) || permissionChecker.isGroupOwner(layout.getGroupId()) %>">
 	<div class="admin-actions">
 		<aui:button onClick='<%= renderResponse.getNamespace() + "addEntry()" %>' value="add-entry" />
+		<aui:button onClick='<%= renderResponse.getNamespace() + "manageEntries()" %>' value="manage-entries" />
 	</div>
 </c:if>
 
 <div class="unread-entries" id="unreadEntries">
 
 	<%
-	LinkedHashMap<Long, long[]> scopes = AnnouncementsUtil.getAnnouncementScopes(user.getUserId());
+	PortletURL portletURL = renderResponse.createRenderURL();
+
+	portletURL.setParameter("mvcPath", "/view.jsp");
+
+	LinkedHashMap<Long, long[]> scopes = new LinkedHashMap<Long, long[]>();
+
+	Boolean customizeAnnouncementsDisplayed = PrefsParamUtil.getBoolean(preferences, request, "customizeAnnouncementsDisplayed", layout.getGroup().isUser() ? false : true);
+
+	long[] selectedScopeRoles = GetterUtil.getLongValues(StringUtil.split(PrefsParamUtil.getString(preferences, request, "selectedScopeRoles", "")));
+	long[] selectedScopeGroups = GetterUtil.getLongValues(StringUtil.split(PrefsParamUtil.getString(preferences, request, "selectedScopeGroups", String.valueOf(layout.getGroupId()))));
+	long[] selectedScopeOrganizations = GetterUtil.getLongValues(StringUtil.split(PrefsParamUtil.getString(preferences, request, "selectedScopeOrganizations", "")));
+	long[] selectedScopeUserGroups = GetterUtil.getLongValues(StringUtil.split(PrefsParamUtil.getString(preferences, request, "selectedScopeUserGroups", "")));
+
+	if (customizeAnnouncementsDisplayed) {
+		if (selectedScopeRoles.length != 0) {
+			scopes.put(PortalUtil.getClassNameId(Role.class.getName()), selectedScopeRoles);
+		}
+
+		if (selectedScopeGroups.length != 0) {
+			scopes.put(PortalUtil.getClassNameId(Group.class.getName()), selectedScopeGroups);
+		}
+
+		if (selectedScopeOrganizations.length != 0) {
+			scopes.put(PortalUtil.getClassNameId(Organization.class.getName()), selectedScopeOrganizations);
+		}
+
+		if (selectedScopeUserGroups.length != 0) {
+			scopes.put(PortalUtil.getClassNameId(UserGroup.class.getName()), selectedScopeUserGroups);
+		}
+	}
+	else {
+		scopes = AnnouncementsUtil.getAnnouncementScopes(user.getUserId());
+	}
 
 	scopes.put(new Long(0), new long[] {0});
 
 	int flagValue = AnnouncementsFlagConstants.NOT_HIDDEN;
 
-	PortletURL portletURL = renderResponse.createRenderURL();
-
-	portletURL.setParameter("mvcPath", "/view.jsp");
-
-	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, "cur1", SearchContainer.DEFAULT_DELTA, portletURL, null, "there-are-no-unread-entries");
+	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, "cur1", pageDelta, portletURL, null, "there-are-currently-no-unread-entries");
 
 	List<AnnouncementsEntry> results = null;
+
 	int total = 0;
 	%>
 
@@ -58,7 +88,7 @@
 <%
 flagValue = AnnouncementsFlagConstants.HIDDEN;
 
-searchContainer = new SearchContainer(renderRequest, null, null, "cur2", SearchContainer.DEFAULT_DELTA, portletURL, null, "there-are-no-read-entries");
+searchContainer = new SearchContainer(renderRequest, null, null, "cur2", pageDelta, portletURL, null, "there-are-currently-no-read-entries");
 
 results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes, portletName.equals(PortletKeys.ALERTS), flagValue, searchContainer.getStart(), searchContainer.getEnd());
 %>
@@ -69,7 +99,7 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 			<span><%= LanguageUtil.get(pageContext, "read-entries") %></span>
 		</div>
 
-		<div class="content">
+		<div class="content aui-toggler-content aui-toggler-content-collapsed">
 			<%@ include file="/entry_iterator.jspf" %>
 
 			<c:if test="<%= total > 0 %>">
@@ -77,7 +107,40 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 			</c:if>
 		</div>
 	</div>
+
+	<aui:script>
+		AUI().ready(
+			'aui-toggler',
+			function(A) {
+				new A.Toggler(
+					{
+						animated: true,
+						container: '#readEntries',
+						content: '.content',
+						expanded: false,
+						header: '.header',
+						transition: {
+							duration: 0.5,
+							easing: 'ease-in-out'
+						}
+					}
+				);
+			}
+		);
+	</aui:script>
 </c:if>
+
+<aui:script use="aui-base">
+	var announcementEntries = A.one('#p_p_id<portlet:namespace />');
+
+	announcementEntries.delegate(
+		'click',
+		function(event) {
+			Liferay.Announcements.toggleEntry(event,'<portlet:namespace />');
+		},
+		'.toggle-entry'
+	);
+</aui:script>
 
 <aui:script>
 	function <portlet:namespace />handleEntry(entryId) {
@@ -139,6 +202,12 @@ results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes
 
 	function <portlet:namespace />editEntry(uri) {
 		<portlet:namespace />openWindow(uri, '<%= LanguageUtil.get(pageContext, "edit-entry") %>', true, 800);
+	}
+
+	function <portlet:namespace />manageEntries() {
+		<portlet:renderURL var="manageEntriesURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/manage_entries.jsp" /></portlet:renderURL>
+
+		<portlet:namespace />openWindow('<%= manageEntriesURL %>', '<%= LanguageUtil.get(pageContext, "manage-entries") %>', true, 800);
 	}
 
 	function <portlet:namespace />openWindow(url, title, modal, width) {
