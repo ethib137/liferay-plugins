@@ -71,7 +71,7 @@
 
 	int flagValue = AnnouncementsFlagConstants.NOT_HIDDEN;
 
-	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, "cur1", pageDelta, portletURL, null, "there-are-currently-no-unread-entries");
+	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, "cur1", pageDelta, portletURL, null, "there-are-no-unread-entries");
 
 	List<AnnouncementsEntry> results = null;
 
@@ -88,7 +88,7 @@
 <%
 flagValue = AnnouncementsFlagConstants.HIDDEN;
 
-searchContainer = new SearchContainer(renderRequest, null, null, "cur2", pageDelta, portletURL, null, "there-are-currently-no-read-entries");
+searchContainer = new SearchContainer(renderRequest, null, null, "cur2", pageDelta, portletURL, null, "there-are-no-read-entries");
 
 results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes, portletName.equals(PortletKeys.ALERTS), flagValue, searchContainer.getStart(), searchContainer.getEnd());
 %>

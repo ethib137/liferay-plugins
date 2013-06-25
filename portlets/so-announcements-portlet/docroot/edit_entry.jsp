@@ -171,7 +171,17 @@ if (entry == null) {
 			</div>
 		</div>
 
-		<div class="entry-footer" id="<%= renderResponse.getNamespace() + "entryFooter" %>"></div>
+		<div class="entry-footer" id="<%= renderResponse.getNamespace() + "entryFooter" %>">
+			<div class="entry-footer-toolbar">
+				<div class="edit-actions">
+					<span class="toggle action aui-helper-hidden">
+						<a class="toggle-entry" data-entryId="preview" href="javascript:;">
+							<span><liferay-ui:message key="view-more" /></span>
+						</a>
+					</span>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -233,16 +243,18 @@ if (entry == null) {
 
 		previewContent.html(content);
 
-		var previewContentContainer = document.getElementById('<portlet:namespace />entryContentContainer');
 		var previewFooter = A.one('#<portlet:namespace />entryFooter');
 
 		if (previewContent.height() > 75) {
-			previewContentContainer.style.height = '75px';
-			previewFooter.html('<div class="entry-footer-toolbar"><div class="edit-actions"><span class="action" id="toggleEntryPreview"><a class="toggle-entry" data-entryId="preview" href="javascript:;"><liferay-ui:message key='view-more' /></a></span></div></div>');
+			var toggle = preview.one('.toggle');
+
+			toggle.removeClass('aui-helper-hidden');
+			preview.addClass('announcement-collapsed')
 		}
 		else {
-			previewContentContainer.style.height = 'auto';
-			previewFooter.empty();
+			var contentContainer = preview.one('.entry-content-container');
+
+			contentContainer.setStyle('height', 'auto');
 		}
 	}
 
@@ -315,6 +327,7 @@ if (entry == null) {
 
 <aui:script use="aui-base">
 	var announcementEntries = A.one('#main-content');
+	console.log(announcementEntries);
 
 	announcementEntries.delegate(
 		'click',
